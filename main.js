@@ -92,20 +92,68 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // ===== RAZORPAY PAYMENT =====
-  payBtn.onclick = () => {
-    if (!currentPrice || currentPrice <= 0) {
-      alert("Please select a package or calculate price");
-      return;
-    }
+  payBtn.onclick = async () => {
 
-    var options = {
-      key: "rzp_test_Rv7XMdWzLnkhx3", // 🔴 PUT YOUR TEST KEY HERE
-      amount: currentPrice * 100,
+  if (!currentPrice || currentPrice <= 0) {
+    alert("Please select a package or calculate price");
+    return;
+  }
+
+  try {
+    // 1️⃣ Create order from backend
+    const orderResponse = await fetch("http://localhost:5000/create-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        amount: currentPrice * 100
+      })
+    });
+
+    const order = await orderResponse.json();
+
+    // 2️⃣ Open Razorpay Checkout
+    const options = {
+      key: "rzp_test_YOUR_KEY_ID", // 🔴 your TEST key id
+      amount: order.amount,
       currency: "INR",
       name: "Social Media Boost",
       description: currentService + " order",
+      order_id: order.id,
 
-      handler: function () {
+      handler: async function (response) {
+
+        // 3️⃣ Verify payment on backend
+        const verifyResponse = await fetch("http://localhost:5000/verify-payment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            order_id: response.razorpay_order_id,
+            payment_id: response.razorpay_payment_id,
+            signature: response.razorpay_signature
+          })
+        });
+
+        const result = await verifyResponse.json();
+
+        if (result.success) {
+          selection.classList.remove("active");
+          success.classList.add("active");
+        } else {
+          alert("Payment verification failed");
+        }
+      },
+
+      theme: { color: "#667eea" }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.open();
+
+  } catch (err) {
+    alert("Backend not reachable. Is server running?");
+  }
+};
+
         // SUCCESS
         selection.classList.remove("active");
         success.classList.add("active");
@@ -139,4 +187,5 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
 });
+
 
