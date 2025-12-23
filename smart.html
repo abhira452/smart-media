@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Boost</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Landing Page -->
+        <div id="landing" class="page active">
+            <h1>Welcome to Social Media Boost</h1>
+            <p>Choose a service to get started:</p>
+            <div class="options">
+                <div class="card" data-service="followers">
+                    <h2>Followers</h2>
+                    <p>Boost your follower count</p>
+                </div>
+                <div class="card" data-service="likes">
+                    <h2>Likes</h2>
+                    <p>Increase engagement with likes</p>
+                </div>
+                <div class="card" data-service="views">
+                    <h2>Views</h2>
+                    <p>Get more views on your content</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Selection Page -->
+        <div id="selection" class="page">
+            <button id="back-btn" class="back-btn">← Back</button>
+            <h1 id="service-title">Select Followers</h1>
+            <div id="packages" class="packages">
+                <!-- Packages will be dynamically generated here -->
+            </div>
+            <div class="custom-section">
+                <label for="custom-quantity">Custom Quantity:</label>
+                <input type="number" id="custom-quantity" min="1" placeholder="Enter quantity">
+                <button id="calculate-btn">Calculate Price</button>
+            </div>
+            <div id="total-price" class="total-price hidden">
+                <p>Total: <span id="price-display">₹0</span></p>
+                <button id="pay-btn" class="pay-btn">Pay Now</button>
+            </div>
+        </div>
+
+        <!-- Success Page -->
+        <div id="success" class="page">
+            <h1>Payment Successful!</h1>
+            <p>Your order is being processed. Service will be delivered based on your payment.</p>
+            <button id="home-btn" class="home-btn">Back to Home</button>
+        </div>
+    </div>
+
+    <!-- Razorpay Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
