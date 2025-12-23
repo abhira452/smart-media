@@ -2,27 +2,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
   alert("JS CONNECTED");
 
-  const landing = document.getElementById('landing');
-  const selection = document.getElementById('selection');
-  const success = document.getElementById('success');
-  const serviceTitle = document.getElementById('service-title');
-  const packagesDiv = document.getElementById('packages');
-  const customQuantity = document.getElementById('custom-quantity');
-  const calculateBtn = document.getElementById('calculate-btn');
-  const totalPriceDiv = document.getElementById('total-price');
-  const priceDisplay = document.getElementById('price-display');
-  const payBtn = document.getElementById('pay-btn');
-  const backBtn = document.getElementById('back-btn');
-  const homeBtn = document.getElementById('home-btn');
+  const landing = document.getElementById("landing");
+  const selection = document.getElementById("selection");
+  const success = document.getElementById("success");
+
+  const serviceTitle = document.getElementById("service-title");
+  const packagesDiv = document.getElementById("packages");
+  const customQuantity = document.getElementById("custom-quantity");
+  const calculateBtn = document.getElementById("calculate-btn");
+  const totalPriceDiv = document.getElementById("total-price");
+  const priceDisplay = document.getElementById("price-display");
+  const payBtn = document.getElementById("pay-btn");
+  const backBtn = document.getElementById("back-btn");
+  const homeBtn = document.getElementById("home-btn");
+
+  let currentService = "";
 
   const prices = {
     followers: 0.30,
     likes: 0.20,
     views: 0.04
   };
-
-  let currentService = '';
-  let selectedQuantity = 0;
 
   const packageData = {
     followers: [
@@ -44,29 +44,38 @@ document.addEventListener("DOMContentLoaded", function () {
     ]
   };
 
-  document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('click', function () {
+  // CARD CLICK
+  document.querySelectorAll(".card").forEach(card => {
+    card.addEventListener("click", function () {
       currentService = this.dataset.service;
       showSelectionPage();
     });
   });
 
-  backBtn.addEventListener('click', showLandingPage);
-  calculateBtn.addEventListener('click', calculateCustomPrice);
-  payBtn.addEventListener('click', initiatePayment);
-  homeBtn.addEventListener('click', showLandingPage);
+  backBtn.addEventListener("click", showLandingPage);
+  homeBtn.addEventListener("click", showLandingPage);
+  calculateBtn.addEventListener("click", calculateCustomPrice);
+  payBtn.addEventListener("click", showSuccessPage);
 
   function showLandingPage() {
-    landing.style.display = "block";
-    selection.style.display = "none";
-    success.style.display = "none";
+    landing.classList.add("active");
+    selection.classList.remove("active");
+    success.classList.remove("active");
   }
 
   function showSelectionPage() {
-    landing.style.display = "none";
-    selection.style.display = "block";
+    landing.classList.remove("active");
+    selection.classList.add("active");
+    success.classList.remove("active");
+
     serviceTitle.innerText = "Select " + currentService;
     renderPackages();
+  }
+
+  function showSuccessPage() {
+    landing.classList.remove("active");
+    selection.classList.remove("active");
+    success.classList.add("active");
   }
 
   function renderPackages() {
@@ -74,11 +83,10 @@ document.addEventListener("DOMContentLoaded", function () {
     packageData[currentService].forEach(pkg => {
       const div = document.createElement("div");
       div.className = "package";
-      div.innerText = `${pkg.qty} ${currentService} - ₹${pkg.price}`;
+      div.innerHTML = `<span>${pkg.qty} ${currentService}</span><span>₹${pkg.price}</span>`;
       div.addEventListener("click", function () {
-        selectedQuantity = pkg.qty;
         priceDisplay.innerText = "₹" + pkg.price;
-        totalPriceDiv.style.display = "block";
+        totalPriceDiv.classList.remove("hidden");
       });
       packagesDiv.appendChild(div);
     });
@@ -91,15 +99,8 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
     const price = Math.round(qty * prices[currentService]);
-    selectedQuantity = qty;
     priceDisplay.innerText = "₹" + price;
-    totalPriceDiv.style.display = "block";
-  }
-
-  function initiatePayment() {
-    alert("Payment page (demo)");
-    success.style.display = "block";
-    selection.style.display = "none";
+    totalPriceDiv.classList.remove("hidden");
   }
 
 });
