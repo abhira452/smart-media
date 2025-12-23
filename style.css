@@ -32,6 +32,13 @@ body {
     display: block;
     opacity: 1;
 }
+.order-details input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
 
 /* Landing Page */
 #landing h1 {
@@ -238,4 +245,5 @@ body {
     .package {
         padding: 10px;
     }
+
 }
