@@ -51,4 +51,70 @@ document.addEventListener("DOMContentLoaded", function () {
       currentService = this.dataset.service;
       landing.classList.remove("active");
       selection.classList.add("active");
-      servi
+      serviceTitle.innerText = "Select " + currentService;
+      renderPackages();
+    });
+  });
+
+  // BACK BUTTON
+  backBtn.onclick = () => {
+    selection.classList.remove("active");
+    landing.classList.add("active");
+    totalPriceDiv.classList.add("hidden");
+  };
+
+  // HOME BUTTON
+  homeBtn.onclick = () => {
+    success.classList.remove("active");
+    landing.classList.add("active");
+  };
+
+  // SHOW PACKAGES
+  function renderPackages() {
+    packagesDiv.innerHTML = "";
+    totalPriceDiv.classList.add("hidden");
+    customQty.value = "";
+
+    packages[currentService].forEach(item => {
+      const div = document.createElement("div");
+      div.className = "package";
+      div.innerText = `${item.qty} ${currentService} - ₹${item.price}`;
+      div.onclick = () => {
+        currentPrice = item.price;
+        priceDisplay.innerText = "₹" + currentPrice;
+        totalPriceDiv.classList.remove("hidden");
+      };
+      packagesDiv.appendChild(div);
+    });
+  }
+
+  // CUSTOM CALCULATION
+  calculateBtn.onclick = () => {
+    if (!currentService) {
+      alert("Please select a service first");
+      return;
+    }
+
+    const qty = Number(customQty.value);
+    if (!qty || qty <= 0) {
+      alert("Enter valid quantity");
+      return;
+    }
+
+    currentPrice = Math.round(qty * priceRate[currentService]);
+    priceDisplay.innerText = "₹" + currentPrice;
+    totalPriceDiv.classList.remove("hidden");
+  };
+
+  // PAY NOW
+  payBtn.onclick = () => {
+    if (currentPrice <= 0) {
+      alert("Please select package or quantity");
+      return;
+    }
+
+    selection.classList.remove("active");
+    success.classList.add("active");
+  };
+
+});
