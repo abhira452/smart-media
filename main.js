@@ -69,25 +69,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // CUSTOM PRICE
   calculateBtn.onclick = () => {
-    const qty = Number(customQty.value);
-    if (!qty) {
-      alert("Enter quantity");
-      return;
-    }
-    currentPrice = Math.round(qty * prices[currentService]);
-    priceDisplay.innerText = "₹" + currentPrice;
-    totalPriceDiv.classList.remove("hidden");
-  };
+  if (!currentService) {
+    alert("Please select Followers / Likes / Views first");
+    return;
+  }
+
+  const qty = Number(customQty.value);
+
+  if (!qty || qty <= 0) {
+    alert("Enter a valid quantity");
+    return;
+  }
+
+  currentPrice = Math.round(qty * prices[currentService]);
+  priceDisplay.innerText = "₹" + currentPrice;
+  totalPriceDiv.classList.remove("hidden");
+};
 
   // PAY
-  payBtn.onclick = () => {
-    if (currentPrice === 0) {
-      alert("Select package first");
-      return;
-    }
-    selection.classList.remove("active");
-    success.classList.add("active");
-  };
+ payBtn.onclick = () => {
+  if (!currentPrice || currentPrice <= 0) {
+    alert("Please select a package or calculate price first");
+    return;
+  }
+
+  // Proceed to next step (success page for now)
+  selection.classList.remove("active");
+  success.classList.add("active");
+};
+
 
   // BACK
   backBtn.onclick = () => {
@@ -101,3 +111,4 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
 });
+
