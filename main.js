@@ -99,7 +99,9 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    currentPrice = Math.round(qty * rates[currentService]);
+   currentPrice = qty * rates[currentService];
+currentPrice = Math.round(currentPrice);
+
     priceDisplay.innerText = "₹" + currentPrice;
     totalPriceDiv.classList.remove("hidden");
   };
@@ -120,7 +122,8 @@ document.addEventListener("DOMContentLoaded", () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount: currentPrice * 100
+          amount: Number(currentPrice) * 100
+
         })
       });
 
@@ -185,6 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
 });
+
 
 
 
