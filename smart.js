@@ -163,5 +163,9 @@ function resetSelection() {
     customQuantity.value = '';
     totalPriceDiv.classList.add('hidden');
     document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
+<script src="samrt.js"></script>
+</body>
+</html>
 
 }
+
