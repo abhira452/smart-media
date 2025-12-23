@@ -81,8 +81,32 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <!-- MAIN JS -->
-<script src="main.js"></script>
+<script>
+  alert("INLINE JS WORKING");
+
+  document.addEventListener("DOMContentLoaded", function () {
+
+    document.querySelectorAll(".card").forEach(card => {
+      card.addEventListener("click", function () {
+        alert("Clicked: " + this.dataset.service);
+      });
+    });
+
+    document.getElementById("calculate-btn").addEventListener("click", function () {
+      alert("Calculate clicked");
+    });
+
+    document.getElementById("pay-btn").addEventListener("click", function () {
+      alert("Pay clicked");
+    });
+
+  });
+</script>
+</body>
+</html>
+
 
 </body>
 </html>
+
 
