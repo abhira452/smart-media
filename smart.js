@@ -7,18 +7,38 @@ const prices = {
 };
 
 // DOM Elements
-const landing = document.getElementById('landing');
-const selection = document.getElementById('selection');
-const success = document.getElementById('success');
-const serviceTitle = document.getElementById('service-title');
-const packagesDiv = document.getElementById('packages');
-const customQuantity = document.getElementById('custom-quantity');
-const calculateBtn = document.getElementById('calculate-btn');
-const totalPriceDiv = document.getElementById('total-price');
-const priceDisplay = document.getElementById('price-display');
-const payBtn = document.getElementById('pay-btn');
-const backBtn = document.getElementById('back-btn');
-const homeBtn = document.getElementById('home-btn');
+document.addEventListener('DOMContentLoaded', () => {
+
+  alert("JS CONNECTED");
+
+  // DOM Elements (NOW HTML IS LOADED)
+  window.landing = document.getElementById('landing');
+  window.selection = document.getElementById('selection');
+  window.success = document.getElementById('success');
+  window.serviceTitle = document.getElementById('service-title');
+  window.packagesDiv = document.getElementById('packages');
+  window.customQuantity = document.getElementById('custom-quantity');
+  window.calculateBtn = document.getElementById('calculate-btn');
+  window.totalPriceDiv = document.getElementById('total-price');
+  window.priceDisplay = document.getElementById('price-display');
+  window.payBtn = document.getElementById('pay-btn');
+  window.backBtn = document.getElementById('back-btn');
+  window.homeBtn = document.getElementById('home-btn');
+
+  // Card click
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => {
+      currentService = card.dataset.service;
+      showSelectionPage();
+    });
+  });
+
+  backBtn.addEventListener('click', showLandingPage);
+  calculateBtn.addEventListener('click', calculateCustomPrice);
+  payBtn.addEventListener('click', initiatePayment);
+  homeBtn.addEventListener('click', showLandingPage);
+});
+
 
 // Current service and selected package
 let currentService = '';
@@ -169,3 +189,4 @@ function resetSelection() {
     totalPriceDiv.classList.add('hidden');
     document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
 }
+
