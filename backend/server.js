@@ -25,7 +25,7 @@ app.post("/create-order", async (req, res) => {
       return res.status(400).json({ error: "Invalid amount" });
     }
 
-    const paise = rupees * 100; // 🔥 FINAL FIX
+    const paise = rupees * 1000; // 🔥 FINAL FIX
 
     const order = await razorpay.orders.create({
       amount: paise,
@@ -59,3 +59,4 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log("Backend running on port " + PORT);
 });
+
