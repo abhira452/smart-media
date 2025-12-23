@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     var options = {
-      key: "SBhWO7xfQObIsiadd43ktrHC", // 🔴 PUT YOUR TEST KEY HERE
+      key: "rzp_test_Rv7XMdWzLnkhx3", // 🔴 PUT YOUR TEST KEY HERE
       amount: currentPrice * 100,
       currency: "INR",
       name: "Social Media Boost",
@@ -139,3 +139,4 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
 });
+
