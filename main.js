@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const order = await response.json();
 
     const options = {
-      key: "rzp_test_YOUR_KEY_ID",
+      key: "rzp_test_Rv7XMdWzLnkhx3",// put the key
       amount: order.amount,
       currency: "INR",
       order_id: order.id,
@@ -113,3 +113,4 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
 });
+
