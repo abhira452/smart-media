@@ -79,26 +79,41 @@ document.addEventListener("DOMContentLoaded", () => {
     totalPriceDiv.classList.remove("hidden");
   };
 
-  payBtn.onclick = () => {
-    if (!currentPrice) {
-      alert("Select package first");
-      return;
-    }
+payBtn.onclick = () => {
+  if (!currentPrice || currentPrice <= 0) {
+    alert("Please select a package first");
+    return;
+  }
 
-    var options = {
-      key: "SBhWO7xfQObIsiadd43ktrHC", // 🔴 PUT YOUR KEY HERE
-      amount: currentPrice * 100,
-      currency: "INR",
-      name: "Social Media Boost",
-      description: currentService + " order",
-      handler: function () {
-        selection.classList.remove("active");
-        success.classList.add("active");
+  var options = {
+    key: "rzp_test_YOUR_KEY_ID", // your test key
+    amount: currentPrice * 100,
+    currency: "INR",
+    name: "Social Media Boost",
+    description: currentService + " order",
+
+    handler: function (response) {
+      // SUCCESS
+      selection.classList.remove("active");
+      success.classList.add("active");
+    },
+
+    modal: {
+      ondismiss: function () {
+        alert("Payment cancelled");
       }
-    };
+    }
+  };
 
-    var rzp = new Razorpay(options);
-    rzp.open();
+  var rzp = new Razorpay(options);
+
+  rzp.on('payment.failed', function (response) {
+    alert("Payment Failed. Please try again.");
+  });
+
+  rzp.open();
+};
+
   };
 
   backBtn.onclick = () => {
@@ -112,3 +127,4 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
 });
+
