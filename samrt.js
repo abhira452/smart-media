@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const serviceTitle = document.getElementById("service-title");
   const packagesDiv = document.getElementById("packages");
-  const customQuantity = document.getElementById("custom-quantity");
+  const customQty = document.getElementById("custom-quantity");
   const calculateBtn = document.getElementById("calculate-btn");
   const totalPriceDiv = document.getElementById("total-price");
   const priceDisplay = document.getElementById("price-display");
@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const homeBtn = document.getElementById("home-btn");
 
   let currentService = "";
+  let currentPrice = 0;
 
   const prices = {
     followers: 0.30,
@@ -24,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
     views: 0.04
   };
 
-  const packageData = {
+  const packages = {
     followers: [
       { qty: 100, price: 30 },
       { qty: 200, price: 60 },
@@ -44,82 +45,75 @@ document.addEventListener("DOMContentLoaded", function () {
     ]
   };
 
-  // CARD CLICK
+  // SERVICE CLICK
   document.querySelectorAll(".card").forEach(card => {
     card.addEventListener("click", function () {
       currentService = this.dataset.service;
-      showSelectionPage();
+      landing.classList.remove("active");
+      selection.classList.add("active");
+      serviceTitle.innerText = "Select " + currentService;
+      renderPackages();
     });
   });
 
-  backBtn.addEventListener("click", showLandingPage);
-  homeBtn.addEventListener("click", showLandingPage);
-  calculateBtn.addEventListener("click", calculateCustomPrice);
-  payBtn.addEventListener("click", function () {
-  if (priceDisplay.innerText === "₹0") {
-    alert("Please select a package or quantity first");
-    return;
-  }
-  showSuccessPage();
-});
-
-
-  function showLandingPage() {
+  // BACK
+  backBtn.onclick = () => {
+    selection.classList.remove("active");
     landing.classList.add("active");
-    selection.classList.remove("active");
+  };
+
+  // HOME
+  homeBtn.onclick = () => {
     success.classList.remove("active");
-  }
+    landing.classList.add("active");
+  };
 
-  function showSelectionPage() {
-    landing.classList.remove("active");
-    selection.classList.add("active");
-    success.classList.remove("active");
-
-    serviceTitle.innerText = "Select " + currentService;
-    renderPackages();
-  }
-
-  function showSuccessPage() {
-    landing.classList.remove("active");
-    selection.classList.remove("active");
-    success.classList.add("active");
-  }
-
+  // RENDER PACKAGES
   function renderPackages() {
     packagesDiv.innerHTML = "";
-    packageData[currentService].forEach(pkg => {
+    totalPriceDiv.classList.add("hidden");
+    customQty.value = "";
+
+    packages[currentService].forEach(item => {
       const div = document.createElement("div");
       div.className = "package";
-      div.innerHTML = `<span>${pkg.qty} ${currentService}</span><span>₹${pkg.price}</span>`;
-      div.addEventListener("click", function () {
-  priceDisplay.innerText = "₹" + pkg.price;
-  totalPriceDiv.classList.remove("hidden");
-});
-
+      div.innerText = `${item.qty} ${currentService} - ₹${item.price}`;
+      div.onclick = () => {
+        currentPrice = item.price;
+        priceDisplay.innerText = "₹" + currentPrice;
+        totalPriceDiv.classList.remove("hidden");
+      };
       packagesDiv.appendChild(div);
     });
   }
 
-  function calculateCustomPrice() {
-  if (currentService === "") {
-    alert("Please select Followers, Likes, or Views first");
-    return;
-  }
+  // CALCULATE CUSTOM PRICE
+  calculateBtn.onclick = () => {
+    if (!currentService) {
+      alert("Select a service first");
+      return;
+    }
 
-  const qty = Number(customQuantity.value);
+    const qty = Number(customQty.value);
+    if (!qty || qty <= 0) {
+      alert("Enter valid quantity");
+      return;
+    }
 
-  if (!qty || qty <= 0) {
-    alert("Please enter a valid quantity");
-    return;
-  }
+    currentPrice = Math.round(qty * prices[currentService]);
+    priceDisplay.innerText = "₹" + currentPrice;
+    totalPriceDiv.classList.remove("hidden");
+  };
 
-  const price = Math.round(qty * prices[currentService]);
+  // PAY NOW
+  payBtn.onclick = () => {
+    if (currentPrice <= 0) {
+      alert("Please select a package or quantity");
+      return;
+    }
 
-  priceDisplay.innerText = "₹" + price;
-  totalPriceDiv.classList.remove("hidden");
-}
-
+    selection.classList.remove("active");
+    success.classList.add("active");
+  };
 
 });
-
-
