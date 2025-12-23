@@ -1,4 +1,7 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
+
+  let currentService = "";
+  let currentPrice = 0;
 
   const landing = document.getElementById("landing");
   const selection = document.getElementById("selection");
@@ -7,80 +10,56 @@ document.addEventListener("DOMContentLoaded", function () {
   const serviceTitle = document.getElementById("service-title");
   const packagesDiv = document.getElementById("packages");
   const customQty = document.getElementById("custom-quantity");
-  const calculateBtn = document.getElementById("calculate-btn");
-  const totalPriceDiv = document.getElementById("total-price");
   const priceDisplay = document.getElementById("price-display");
+  const totalPriceDiv = document.getElementById("total-price");
+
+  const calculateBtn = document.getElementById("calculate-btn");
   const payBtn = document.getElementById("pay-btn");
   const backBtn = document.getElementById("back-btn");
   const homeBtn = document.getElementById("home-btn");
 
-  let currentService = "";
-  let currentPrice = 0;
-
-  // price rules
-  const priceRate = {
-    followers: 0.30, // ₹ per follower
-    likes: 0.20,     // ₹ per like
-    views: 0.04      // ₹ per view
+  const prices = {
+    followers: 0.30,
+    likes: 0.20,
+    views: 0.04
   };
 
-  // fixed packages
   const packages = {
     followers: [
       { qty: 100, price: 30 },
-      { qty: 200, price: 60 },
-      { qty: 500, price: 150 },
-      { qty: 1000, price: 300 }
+      { qty: 200, price: 60 }
     ],
     likes: [
       { qty: 100, price: 20 },
-      { qty: 200, price: 40 },
-      { qty: 500, price: 100 },
-      { qty: 1000, price: 200 }
+      { qty: 200, price: 40 }
     ],
     views: [
       { qty: 1000, price: 40 },
-      { qty: 5000, price: 200 },
-      { qty: 10000, price: 400 }
+      { qty: 5000, price: 200 }
     ]
   };
 
   // SERVICE CLICK
   document.querySelectorAll(".card").forEach(card => {
-    card.addEventListener("click", function () {
-      currentService = this.dataset.service;
+    card.onclick = () => {
+      currentService = card.dataset.service;
       landing.classList.remove("active");
       selection.classList.add("active");
       serviceTitle.innerText = "Select " + currentService;
-      renderPackages();
-    });
+      showPackages();
+    };
   });
 
-  // BACK BUTTON
-  backBtn.onclick = () => {
-    selection.classList.remove("active");
-    landing.classList.add("active");
-    totalPriceDiv.classList.add("hidden");
-  };
-
-  // HOME BUTTON
-  homeBtn.onclick = () => {
-    success.classList.remove("active");
-    landing.classList.add("active");
-  };
-
-  // SHOW PACKAGES
-  function renderPackages() {
+  function showPackages() {
     packagesDiv.innerHTML = "";
     totalPriceDiv.classList.add("hidden");
-    customQty.value = "";
 
-    packages[currentService].forEach(item => {
+    packages[currentService].forEach(p => {
       const div = document.createElement("div");
       div.className = "package";
-      div.innerText = `${item.qty} ${currentService} - ₹${item.price}`;
+      div.innerText = `${p.qty} ${currentService} - ₹${p.price}`;
       div.onclick = () => {
-        currentPrice = item.price;
+        currentPrice = p.price;
         priceDisplay.innerText = "₹" + currentPrice;
         totalPriceDiv.classList.remove("hidden");
       };
@@ -88,33 +67,37 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // CUSTOM CALCULATION
+  // CUSTOM PRICE
   calculateBtn.onclick = () => {
-    if (!currentService) {
-      alert("Please select a service first");
-      return;
-    }
-
     const qty = Number(customQty.value);
-    if (!qty || qty <= 0) {
-      alert("Enter valid quantity");
+    if (!qty) {
+      alert("Enter quantity");
       return;
     }
-
-    currentPrice = Math.round(qty * priceRate[currentService]);
+    currentPrice = Math.round(qty * prices[currentService]);
     priceDisplay.innerText = "₹" + currentPrice;
     totalPriceDiv.classList.remove("hidden");
   };
 
-  // PAY NOW
+  // PAY
   payBtn.onclick = () => {
-    if (currentPrice <= 0) {
-      alert("Please select package or quantity");
+    if (currentPrice === 0) {
+      alert("Select package first");
       return;
     }
-
     selection.classList.remove("active");
     success.classList.add("active");
+  };
+
+  // BACK
+  backBtn.onclick = () => {
+    selection.classList.remove("active");
+    landing.classList.add("active");
+  };
+
+  homeBtn.onclick = () => {
+    success.classList.remove("active");
+    landing.classList.add("active");
   };
 
 });
