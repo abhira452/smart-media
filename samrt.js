@@ -55,7 +55,14 @@ document.addEventListener("DOMContentLoaded", function () {
   backBtn.addEventListener("click", showLandingPage);
   homeBtn.addEventListener("click", showLandingPage);
   calculateBtn.addEventListener("click", calculateCustomPrice);
-  payBtn.addEventListener("click", showSuccessPage);
+  payBtn.addEventListener("click", function () {
+  if (priceDisplay.innerText === "₹0") {
+    alert("Please select a package or quantity first");
+    return;
+  }
+  showSuccessPage();
+});
+
 
   function showLandingPage() {
     landing.classList.add("active");
@@ -85,9 +92,10 @@ document.addEventListener("DOMContentLoaded", function () {
       div.className = "package";
       div.innerHTML = `<span>${pkg.qty} ${currentService}</span><span>₹${pkg.price}</span>`;
       div.addEventListener("click", function () {
-        priceDisplay.innerText = "₹" + pkg.price;
-        totalPriceDiv.classList.remove("hidden");
-      });
+  priceDisplay.innerText = "₹" + pkg.price;
+  totalPriceDiv.classList.remove("hidden");
+});
+
       packagesDiv.appendChild(div);
     });
   }
@@ -113,4 +121,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 });
+
 
