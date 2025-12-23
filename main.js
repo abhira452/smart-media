@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // 2️⃣ Razorpay options
       const options = {
-        key: " rzp_test_Rv7XMdWzLnkhx3", // 🔴 PUT YOUR TEST KEY ID ONLY
+        key: "rzp_test_Rv7XMdWzLnkhx3", // 🔴 PUT YOUR TEST KEY ID ONLY
         amount: order.amount,
         currency: "INR",
         name: "Social Media Boost",
@@ -198,3 +198,4 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
 });
+
