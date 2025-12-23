@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 🔥 FINAL AMOUNT (FROM DISPLAY — NOT VARIABLE)
     const finalAmountRupees = Number(priceDisplay.innerText.replace("₹", ""));
-    const finalAmountPaise = finalAmountRupees * 100;
+    const finalAmountPaise = finalAmountRupees * 1000;
 
     try {
       // 1️⃣ Create order from backend
@@ -198,4 +198,5 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
 });
+
 
