@@ -1,3 +1,4 @@
+alert("JS CONNECTED");
 // Price configuration (easy to change)
 const prices = {
     followers: 0.30, // ₹ per follower
@@ -162,4 +163,5 @@ function resetSelection() {
     customQuantity.value = '';
     totalPriceDiv.classList.add('hidden');
     document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
+
 }
