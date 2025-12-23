@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       // 1️⃣ Create order from backend
-      const orderResponse = await fetch("https://smart-media-official.onrender.com", {
+      const orderResponse = await fetch("https://smart-media-official.onrender.com/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
         handler: async function (response) {
 
           // 3️⃣ Verify payment with backend
-          const verifyResponse = await fetch("https://smart-media-official.onrender.com", {
+          const verifyResponse = await fetch("https://smart-media-official.onrender.com/verify-payment", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -185,5 +185,6 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
 });
+
 
 
