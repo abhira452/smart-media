@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const homeBtn = document.getElementById("home-btn");
 
   // ======================
-  // PRICE RULES
+  // PRICE RULES (IN RUPEES)
   // ======================
   const rates = {
     followers: 0.30,
@@ -70,17 +70,18 @@ document.addEventListener("DOMContentLoaded", () => {
     packagesDiv.innerHTML = "";
     totalPriceDiv.classList.add("hidden");
     customQty.value = "";
+    currentPrice = 0;
 
     packages[currentService].forEach(pkg => {
       const div = document.createElement("div");
       div.className = "package";
       div.innerText = `${pkg.qty} ${currentService} - ₹${pkg.price}`;
-     div.onclick = () => {
-  currentPrice = Number(pkg.price);   // FORCE NUMBER
-  console.log("Selected price:", currentPrice);
-  priceDisplay.innerText = "₹" + currentPrice;
-  totalPriceDiv.classList.remove("hidden");
-};
+
+      div.onclick = () => {
+        currentPrice = Number(pkg.price);   // 🔥 FORCE NUMBER
+        priceDisplay.innerText = "₹" + currentPrice;
+        totalPriceDiv.classList.remove("hidden");
+      };
 
       packagesDiv.appendChild(div);
     });
@@ -97,19 +98,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const qty = Number(customQty.value);
     if (!qty || qty <= 0) {
-      alert("Enter a valid quantity");
+      alert("Enter valid quantity");
       return;
     }
 
-   currentPrice = qty * rates[currentService];
-currentPrice = Math.round(currentPrice);
-
+    currentPrice = Math.round(qty * rates[currentService]); // RUPEES
     priceDisplay.innerText = "₹" + currentPrice;
     totalPriceDiv.classList.remove("hidden");
   };
 
   // ======================
-  // PAY NOW (BACKEND + RAZORPAY)
+  // PAY NOW (FIXED AMOUNT LOGIC)
   // ======================
   payBtn.onclick = async () => {
 
@@ -118,25 +117,28 @@ currentPrice = Math.round(currentPrice);
       return;
     }
 
+    // 🔥 FINAL AMOUNT (FROM DISPLAY — NOT VARIABLE)
+    const finalAmountRupees = Number(priceDisplay.innerText.replace("₹", ""));
+    const finalAmountPaise = finalAmountRupees * 100;
+
     try {
       // 1️⃣ Create order from backend
-      const orderResponse = await fetch("https://smart-media-official.onrender.com/create-order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        const finalAmount = Number(priceDisplay.innerText.replace("₹", ""));
-console.log("Final amount in rupees:", finalAmount);
-
-body: JSON.stringify({
-  amount: finalAmount * 100
-})
-
-      });
+      const orderResponse = await fetch(
+        "https://smart-media-official.onrender.com/create-order",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: finalAmountPaise
+          })
+        }
+      );
 
       const order = await orderResponse.json();
 
       // 2️⃣ Razorpay options
       const options = {
-        key: "rzp_test_Rv7XMdWzLnkhx3",   // 🔴 PUT YOUR RAZORPAY TEST KEY HERE
+        key: " rzp_test_Rv7XMdWzLnkhx3", // 🔴 PUT YOUR TEST KEY ID ONLY
         amount: order.amount,
         currency: "INR",
         name: "Social Media Boost",
@@ -145,16 +147,19 @@ body: JSON.stringify({
 
         handler: async function (response) {
 
-          // 3️⃣ Verify payment with backend
-          const verifyResponse = await fetch("https://smart-media-official.onrender.com/verify-payment", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              order_id: response.razorpay_order_id,
-              payment_id: response.razorpay_payment_id,
-              signature: response.razorpay_signature
-            })
-          });
+          // 3️⃣ Verify payment
+          const verifyResponse = await fetch(
+            "https://smart-media-official.onrender.com/verify-payment",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                order_id: response.razorpay_order_id,
+                payment_id: response.razorpay_payment_id,
+                signature: response.razorpay_signature
+              })
+            }
+          );
 
           const result = await verifyResponse.json();
 
@@ -175,7 +180,7 @@ body: JSON.stringify({
       rzp.open();
 
     } catch (err) {
-      alert("Backend not reachable. Is server running?");
+      alert("Backend not reachable");
     }
   };
 
@@ -193,8 +198,3 @@ body: JSON.stringify({
   };
 
 });
-
-
-
-
-
