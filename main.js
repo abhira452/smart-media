@@ -75,11 +75,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const div = document.createElement("div");
       div.className = "package";
       div.innerText = `${pkg.qty} ${currentService} - ₹${pkg.price}`;
-      div.onclick = () => {
-        currentPrice = pkg.price;
-        priceDisplay.innerText = "₹" + currentPrice;
-        totalPriceDiv.classList.remove("hidden");
-      };
+     div.onclick = () => {
+  currentPrice = Number(pkg.price);   // FORCE NUMBER
+  console.log("Selected price:", currentPrice);
+  priceDisplay.innerText = "₹" + currentPrice;
+  totalPriceDiv.classList.remove("hidden");
+};
+
       packagesDiv.appendChild(div);
     });
   }
@@ -121,10 +123,13 @@ currentPrice = Math.round(currentPrice);
       const orderResponse = await fetch("https://smart-media-official.onrender.com/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: Number(currentPrice) * 100
+        const finalAmount = Number(priceDisplay.innerText.replace("₹", ""));
+console.log("Final amount in rupees:", finalAmount);
 
-        })
+body: JSON.stringify({
+  amount: finalAmount * 100
+})
+
       });
 
       const order = await orderResponse.json();
@@ -188,6 +193,7 @@ currentPrice = Math.round(currentPrice);
   };
 
 });
+
 
 
 
