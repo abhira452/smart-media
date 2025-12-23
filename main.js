@@ -87,11 +87,38 @@ document.addEventListener("DOMContentLoaded", () => {
 };
 
   // PAY
- payBtn.onclick = () => {
+payBtn.onclick = () => {
+
   if (!currentPrice || currentPrice <= 0) {
     alert("Please select a package or calculate price first");
     return;
   }
+
+  var options = {
+    key: "SBhWO7xfQObIsiadd43ktrHC", // 🔴 put your Razorpay Key ID here
+    amount: currentPrice * 100, // amount in paisa
+    currency: "INR",
+    name: "Social Media Boost",
+    description: currentService + " purchase",
+    handler: function (response) {
+      // Payment successful
+      selection.classList.remove("active");
+      success.classList.add("active");
+    },
+    prefill: {
+      name: "",
+      email: "",
+      contact: ""
+    },
+    theme: {
+      color: "#667eea"
+    }
+  };
+
+  var rzp = new Razorpay(options);
+  rzp.open();
+};
+
 
   // Proceed to next step (success page for now)
   selection.classList.remove("active");
@@ -111,4 +138,5 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
 });
+
 
