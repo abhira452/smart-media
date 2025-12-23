@@ -93,14 +93,24 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function calculateCustomPrice() {
-    const qty = parseInt(customQuantity.value);
-    if (!qty || qty <= 0) {
-      alert("Enter valid quantity");
-      return;
-    }
-    const price = Math.round(qty * prices[currentService]);
-    priceDisplay.innerText = "₹" + price;
-    totalPriceDiv.classList.remove("hidden");
+  if (currentService === "") {
+    alert("Please select Followers, Likes, or Views first");
+    return;
   }
 
+  const qty = Number(customQuantity.value);
+
+  if (!qty || qty <= 0) {
+    alert("Please enter a valid quantity");
+    return;
+  }
+
+  const price = Math.round(qty * prices[currentService]);
+
+  priceDisplay.innerText = "₹" + price;
+  totalPriceDiv.classList.remove("hidden");
+}
+
+
 });
+
