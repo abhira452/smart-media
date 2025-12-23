@@ -1,10 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ===== VARIABLES =====
+  // ======================
+  // GLOBAL VARIABLES
+  // ======================
   let currentService = "";
   let currentPrice = 0;
 
-  // ===== ELEMENTS =====
+  // ======================
+  // DOM ELEMENTS
+  // ======================
   const landing = document.getElementById("landing");
   const selection = document.getElementById("selection");
   const success = document.getElementById("success");
@@ -12,15 +16,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const serviceTitle = document.getElementById("service-title");
   const packagesDiv = document.getElementById("packages");
   const customQty = document.getElementById("custom-quantity");
-  const priceDisplay = document.getElementById("price-display");
-  const totalPriceDiv = document.getElementById("total-price");
-
   const calculateBtn = document.getElementById("calculate-btn");
+
+  const totalPriceDiv = document.getElementById("total-price");
+  const priceDisplay = document.getElementById("price-display");
+
   const payBtn = document.getElementById("pay-btn");
   const backBtn = document.getElementById("back-btn");
   const homeBtn = document.getElementById("home-btn");
 
-  // ===== PRICING RULES =====
+  // ======================
+  // PRICE RULES
+  // ======================
   const rates = {
     followers: 0.30,
     likes: 0.20,
@@ -43,7 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
     ]
   };
 
-  // ===== SERVICE CLICK =====
+  // ======================
+  // SERVICE SELECTION
+  // ======================
   document.querySelectorAll(".card").forEach(card => {
     card.onclick = () => {
       currentService = card.dataset.service;
@@ -54,18 +63,20 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   });
 
-  // ===== SHOW PACKAGES =====
+  // ======================
+  // SHOW PACKAGES
+  // ======================
   function showPackages() {
     packagesDiv.innerHTML = "";
     totalPriceDiv.classList.add("hidden");
     customQty.value = "";
 
-    packages[currentService].forEach(p => {
+    packages[currentService].forEach(pkg => {
       const div = document.createElement("div");
       div.className = "package";
-      div.innerText = `${p.qty} ${currentService} - ₹${p.price}`;
+      div.innerText = `${pkg.qty} ${currentService} - ₹${pkg.price}`;
       div.onclick = () => {
-        currentPrice = p.price;
+        currentPrice = pkg.price;
         priceDisplay.innerText = "₹" + currentPrice;
         totalPriceDiv.classList.remove("hidden");
       };
@@ -73,7 +84,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ===== CUSTOM PRICE CALCULATION =====
+  // ======================
+  // CUSTOM QUANTITY CALCULATION
+  // ======================
   calculateBtn.onclick = () => {
     if (!currentService) {
       alert("Please select a service first");
@@ -82,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const qty = Number(customQty.value);
     if (!qty || qty <= 0) {
-      alert("Enter valid quantity");
+      alert("Enter a valid quantity");
       return;
     }
 
@@ -91,91 +104,76 @@ document.addEventListener("DOMContentLoaded", () => {
     totalPriceDiv.classList.remove("hidden");
   };
 
-  // ===== RAZORPAY PAYMENT =====
+  // ======================
+  // PAY NOW (BACKEND + RAZORPAY)
+  // ======================
   payBtn.onclick = async () => {
 
-  if (!currentPrice || currentPrice <= 0) {
-    alert("Please select a package or calculate price");
-    return;
-  }
+    if (!currentPrice || currentPrice <= 0) {
+      alert("Please select a package or calculate price");
+      return;
+    }
 
-  try {
-    // 1️⃣ Create order from backend
-    const orderResponse = await fetch("http://localhost:5000/create-order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        amount: currentPrice * 100
-      })
-    });
+    try {
+      // 1️⃣ Create order from backend
+      const orderResponse = await fetch("http://localhost:5000/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: currentPrice * 100
+        })
+      });
 
-    const order = await orderResponse.json();
+      const order = await orderResponse.json();
 
-    // 2️⃣ Open Razorpay Checkout
-    const options = {
-      key: "rzp_test_YOUR_KEY_ID", // 🔴 your TEST key id
-      amount: order.amount,
-      currency: "INR",
-      name: "Social Media Boost",
-      description: currentService + " order",
-      order_id: order.id,
+      // 2️⃣ Razorpay options
+      const options = {
+        key: "rzp_test_YOUR_KEY_ID",   // 🔴 PUT YOUR RAZORPAY TEST KEY HERE
+        amount: order.amount,
+        currency: "INR",
+        name: "Social Media Boost",
+        description: currentService + " order",
+        order_id: order.id,
 
-      handler: async function (response) {
+        handler: async function (response) {
 
-        // 3️⃣ Verify payment on backend
-        const verifyResponse = await fetch("http://localhost:5000/verify-payment", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            order_id: response.razorpay_order_id,
-            payment_id: response.razorpay_payment_id,
-            signature: response.razorpay_signature
-          })
-        });
+          // 3️⃣ Verify payment with backend
+          const verifyResponse = await fetch("http://localhost:5000/verify-payment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              order_id: response.razorpay_order_id,
+              payment_id: response.razorpay_payment_id,
+              signature: response.razorpay_signature
+            })
+          });
 
-        const result = await verifyResponse.json();
+          const result = await verifyResponse.json();
 
-        if (result.success) {
-          selection.classList.remove("active");
-          success.classList.add("active");
-        } else {
-          alert("Payment verification failed");
+          if (result.success) {
+            selection.classList.remove("active");
+            success.classList.add("active");
+          } else {
+            alert("Payment verification failed");
+          }
+        },
+
+        theme: {
+          color: "#667eea"
         }
-      },
+      };
 
-      theme: { color: "#667eea" }
-    };
+      const rzp = new Razorpay(options);
+      rzp.open();
 
-    const rzp = new Razorpay(options);
-    rzp.open();
-
-  } catch (err) {
-    alert("Backend not reachable. Is server running?");
-  }
-};
-
-        // SUCCESS
-        selection.classList.remove("active");
-        success.classList.add("active");
-      },
-
-      modal: {
-        ondismiss: function () {
-          alert("Payment cancelled");
-        }
-      }
-    };
-
-    var rzp = new Razorpay(options);
-
-    rzp.on("payment.failed", function () {
-      alert("Payment Failed. Please try again.");
-    });
-
-    rzp.open();
+    } catch (err) {
+      alert("Backend not reachable. Is server running?");
+    }
   };
 
-  // ===== NAVIGATION =====
+  // ======================
+  // NAVIGATION
+  // ======================
   backBtn.onclick = () => {
     selection.classList.remove("active");
     landing.classList.add("active");
@@ -187,5 +185,3 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
 });
-
-
