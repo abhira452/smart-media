@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+
+    select {
+      padding: 5px;
+    }
+
+    button {
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>Admin Panel – Orders</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Order ID</th>
+      <th>Service</th>
+      <th>Amount</th>
+      <th>Username</th>
+      <th>Status</th>
+      <th>Update</th>
+    </tr>
+  </thead>
+  <tbody id="ordersTable"></tbody>
+</table>
+
+<script>
+function loadOrders() {
+  const orders = JSON.parse(localStorage.getItem("orders")) || [];
+  const table = document.getElementById("ordersTable");
+  table.innerHTML = "";
+
+  if (orders.length === 0) {
+    table.innerHTML = "<tr><td colspan='6'>No orders found</td></tr>";
+    return;
+  }
+
+  orders.forEach((order, index) => {
+    table.innerHTML += `
+      <tr>
+        <td>${order.orderId}</td>
+        <td>${order.service}</td>
+        <td>₹${order.amount}</td>
+        <td>${order.username}</td>
+        <td>
+          <select id="status-${index}">
+            <option ${order.status === "Processing" ? "selected" : ""}>Processing</option>
+            <option ${order.status === "Completed" ? "selected" : ""}>Completed</option>
+            <option ${order.status === "Cancelled" ? "selected" : ""}>Cancelled</option>
+          </select>
+        </td>
+        <td>
+          <button onclick="updateStatus(${index})">Save</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+function updateStatus(index) {
+  const orders = JSON.parse(localStorage.getItem("orders")) || [];
+  const newStatus = document.getElementById(`status-${index}`).value;
+  orders[index].status = newStatus;
+  localStorage.setItem("orders", JSON.stringify(orders));
+  alert("Status updated successfully");
+}
+
+loadOrders();
+</script>
+
+</body>
+</html>
