@@ -8,16 +8,17 @@ if (helpBtn) {
     helpOptions.style.display =
       helpOptions.style.display === "block" ? "none" : "block";
   };
+   const usernameInput = document.getElementById("username");
+  const customerWhatsappInput = document.getElementById("customerWhatsapp");
+  const whatsappLink = document.getElementById("whatsappLink");
+
 }
 
 
   let currentService = "";
   let currentPrice = 0;
 
-  const usernameInput = document.getElementById("username");
-  const customerWhatsappInput = document.getElementById("customerWhatsapp");
-  const whatsappLink = document.getElementById("whatsappLink");
-
+ 
   const landing = document.getElementById("landing");
   const selection = document.getElementById("selection");
   const success = document.getElementById("success");
@@ -168,5 +169,6 @@ Customer WhatsApp: ${customerWhatsapp}
   };
 
 });
+
 
 
