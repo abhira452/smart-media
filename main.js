@@ -20,9 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const backBtn = document.getElementById("back-btn");
   const homeBtn = document.getElementById("home-btn");
 
-  // 🔹 ORDER DETAILS INPUTS
+  // 🔹 ONLY EXISTING INPUTS
   const usernameInput = document.getElementById("username");
-  const profileLinkInput = document.getElementById("profileLink");
   const customerWhatsappInput = document.getElementById("customerWhatsapp");
 
   // ===== PRICING RULES =====
@@ -80,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ===== CUSTOM PRICE CALCULATION =====
+  // ===== CUSTOM PRICE =====
   calculateBtn.onclick = () => {
     if (!currentService) {
       alert("Please select a service first");
@@ -98,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
     totalPriceDiv.classList.remove("hidden");
   };
 
-  // ===== RAZORPAY PAYMENT + WHATSAPP =====
+  // ===== PAY NOW + WHATSAPP =====
   payBtn.onclick = () => {
 
     if (!currentPrice || currentPrice <= 0) {
@@ -106,18 +105,16 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // 🔹 VALIDATE ORDER DETAILS
-    const username = usernameInput.value.trim();
-    const profileLink = profileLinkInput.value.trim();
-    const customerWhatsapp = customerWhatsappInput.value.trim();
+    const username = usernameInput ? usernameInput.value.trim() : "";
+    const customerWhatsapp = customerWhatsappInput ? customerWhatsappInput.value.trim() : "";
 
-    if (!username || !profileLink || !customerWhatsapp) {
-      alert("Please fill all order details");
+    if (!username || !customerWhatsapp) {
+      alert("Please fill Username and WhatsApp Number");
       return;
     }
 
     var options = {
-      key: "rzp_test_Rv7XMdWzLnkhx3", // 🔴 PUT YOUR RAZORPAY TEST KEY
+      key: "rzp_test_Rv7XMdWzLnkhx3", // 🔴 PUT YOUR TEST KEY
       amount: currentPrice * 100,
       currency: "INR",
       name: "Social Media Boost",
@@ -125,30 +122,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
       handler: function () {
 
-        // ✅ SHOW SUCCESS PAGE
+        // SUCCESS PAGE
         selection.classList.remove("active");
         success.classList.add("active");
 
-        // ✅ WHATSAPP MESSAGE TO ADMIN
-        const adminNumber = "918433316066"; // 🔴 YOUR WHATSAPP NUMBER
+        // WHATSAPP MESSAGE
+        const adminNumber = "918433316066"; // 🔴 YOUR NUMBER
 
         const message = `
-New Order Received 🚀
+New Order 🚀
 
 Service: ${currentService}
 Amount: ₹${currentPrice}
 Username: ${username}
-Link: ${profileLink}
 Customer WhatsApp: ${customerWhatsapp}
 `;
 
-        const whatsappURL =
-          "https://wa.me/" +
-          adminNumber +
-          "?text=" +
-          encodeURIComponent(message);
-
-        window.open(whatsappURL, "_blank");
+        window.open(
+          "https://wa.me/" + adminNumber + "?text=" + encodeURIComponent(message),
+          "_blank"
+        );
       },
 
       modal: {
