@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "ORD-" + new Date().getFullYear() + "-" + Math.floor(10000 + Math.random() * 90000);
 
     const options = {
-      key: "rzp_test_YOUR_KEY_ID", // 🔴 YOUR RAZORPAY TEST KEY
+      key: "rzp_test_Rv7XMdWzLnkhx3", // 🔴 YOUR RAZORPAY TEST KEY
       amount: currentPrice * 100,
       currency: "INR",
       name: "Social Media Boost",
@@ -150,7 +150,7 @@ Delivery within 24 hours
           encodeURIComponent(userMessage);
 
         // ===== WHATSAPP TO ADMIN =====
-        const adminNumber = "91XXXXXXXXXX"; // 🔴 YOUR NUMBER
+        const adminNumber = "918433316066"; // 🔴 YOUR NUMBER
 
         const adminMessage = `
 New Order 🚀
@@ -184,3 +184,4 @@ Customer WhatsApp: ${customerWhatsapp}
   };
 
 });
+
