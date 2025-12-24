@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "ORD-" + new Date().getFullYear() + "-" + Math.floor(10000 + Math.random() * 90000);
 
     const options = {
-      key: "rzp_test_YOUR_KEY_HERE",
+      key: "rzp_test_Rv7XMdWzLnkhx3",    //put your key here
       amount: currentPrice * 100,
       currency: "INR",
       name: "Social Media Boost",
@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         localStorage.setItem("orders", JSON.stringify(orders));
 
-        const adminNumber = "91843666666";
+        const adminNumber = "918433316066";   //put your number here
 
         const message = `
 New Order 🚀
@@ -206,3 +206,4 @@ Customer WhatsApp: ${customerWhatsapp}
   };
 
 });
+
