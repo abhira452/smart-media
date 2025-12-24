@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ===== VARIABLES =====
+  // ================= VARIABLES =================
   let currentService = "";
   let currentPrice = 0;
 
-  // ===== ELEMENTS =====
+  // ================= ELEMENTS =================
   const landing = document.getElementById("landing");
   const selection = document.getElementById("selection");
   const success = document.getElementById("success");
@@ -20,11 +20,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const backBtn = document.getElementById("back-btn");
   const homeBtn = document.getElementById("home-btn");
 
-  // 🔹 ONLY EXISTING INPUTS
+  // Order inputs (ONLY THESE ARE USED)
   const usernameInput = document.getElementById("username");
   const customerWhatsappInput = document.getElementById("customerWhatsapp");
 
-  // ===== PRICING RULES =====
+  // WhatsApp link on success page
+  const whatsappLink = document.getElementById("whatsappLink");
+
+  // ================= PRICING =================
   const rates = {
     followers: 0.30,
     likes: 0.20,
@@ -47,40 +50,48 @@ document.addEventListener("DOMContentLoaded", () => {
     ]
   };
 
-  // ===== SERVICE CLICK =====
-  document.querySelectorAll(".card").forEach(card => {
-    card.onclick = () => {
+  // ================= SERVICE CARDS =================
+  const cards = document.querySelectorAll(".card");
+
+  if (cards.length === 0) {
+    console.error("Service cards not found");
+    return;
+  }
+
+  cards.forEach(card => {
+    card.addEventListener("click", () => {
       currentService = card.dataset.service;
       landing.classList.remove("active");
       selection.classList.add("active");
       serviceTitle.innerText = "Select " + currentService;
       showPackages();
-    };
+    });
   });
 
-  // ===== SHOW PACKAGES =====
+  // ================= SHOW PACKAGES =================
   function showPackages() {
     packagesDiv.innerHTML = "";
     totalPriceDiv.classList.add("hidden");
     customQty.value = "";
+    currentPrice = 0;
 
     packages[currentService].forEach(p => {
       const div = document.createElement("div");
       div.className = "package";
       div.innerText = `${p.qty} ${currentService} - ₹${p.price}`;
 
-      div.onclick = () => {
+      div.addEventListener("click", () => {
         currentPrice = p.price;
         priceDisplay.innerText = "₹" + currentPrice;
         totalPriceDiv.classList.remove("hidden");
-      };
+      });
 
       packagesDiv.appendChild(div);
     });
   }
 
-  // ===== CUSTOM PRICE =====
-  calculateBtn.onclick = () => {
+  // ================= CUSTOM CALCULATION =================
+  calculateBtn.addEventListener("click", () => {
     if (!currentService) {
       alert("Please select a service first");
       return;
@@ -95,10 +106,10 @@ document.addEventListener("DOMContentLoaded", () => {
     currentPrice = Math.round(qty * rates[currentService]);
     priceDisplay.innerText = "₹" + currentPrice;
     totalPriceDiv.classList.remove("hidden");
-  };
+  });
 
-  // ===== PAY NOW + WHATSAPP =====
-  payBtn.onclick = () => {
+  // ================= PAY NOW =================
+  payBtn.addEventListener("click", () => {
 
     if (!currentPrice || currentPrice <= 0) {
       alert("Please select a package or calculate price");
@@ -113,8 +124,8 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    var options = {
-      key: "rzp_test_Rv7XMdWzLnkhx3", // 🔴 PUT YOUR TEST KEY
+    const options = {
+      key: "rzp_test_Rv7XMdWzLnkhx3", // 🔴 PUT YOUR RAZORPAY TEST KEY
       amount: currentPrice * 100,
       currency: "INR",
       name: "Social Media Boost",
@@ -122,11 +133,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       handler: function () {
 
-        // SUCCESS PAGE
+        // Show success page
         selection.classList.remove("active");
         success.classList.add("active");
 
-        // WHATSAPP MESSAGE
+        // Prepare WhatsApp message (NO auto open)
         const adminNumber = "918433316066"; // 🔴 YOUR NUMBER
 
         const message = `
@@ -138,26 +149,15 @@ Username: ${username}
 Customer WhatsApp: ${customerWhatsapp}
 `;
 
-       const adminNumber = "918433316066"; // your number
+        const whatsappURL =
+          "https://wa.me/" +
+          adminNumber +
+          "?text=" +
+          encodeURIComponent(message);
 
-const message = `
-New Order 🚀
-
-Service: ${currentService}
-Amount: ₹${currentPrice}
-Username: ${username}
-Customer WhatsApp: ${customerWhatsapp}
-`;
-
-const whatsappURL =
-  "https://wa.me/" +
-  adminNumber +
-  "?text=" +
-  encodeURIComponent(message);
-
-// set link instead of auto-open
-document.getElementById("whatsappLink").href = whatsappURL;
-
+        if (whatsappLink) {
+          whatsappLink.href = whatsappURL;
+        }
       },
 
       modal: {
@@ -167,25 +167,24 @@ document.getElementById("whatsappLink").href = whatsappURL;
       }
     };
 
-    var rzp = new Razorpay(options);
+    const rzp = new Razorpay(options);
 
     rzp.on("payment.failed", function () {
       alert("Payment Failed. Please try again.");
     });
 
     rzp.open();
-  };
+  });
 
-  // ===== NAVIGATION =====
-  backBtn.onclick = () => {
+  // ================= NAVIGATION =================
+  backBtn.addEventListener("click", () => {
     selection.classList.remove("active");
     landing.classList.add("active");
-  };
+  });
 
-  homeBtn.onclick = () => {
+  homeBtn.addEventListener("click", () => {
     success.classList.remove("active");
     landing.classList.add("active");
-  };
+  });
 
 });
-
