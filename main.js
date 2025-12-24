@@ -131,7 +131,8 @@ document.addEventListener("DOMContentLoaded", () => {
       name: "Social Media Boost",
       description: currentService + " order",
 
-      handler: function () {
+      handler: function ()const orderId = "ORD-" + new Date().getFullYear() + "-" + Math.floor(10000 + Math.random() * 90000);
+{
 
         // Show success page
         selection.classList.remove("active");
@@ -188,3 +189,4 @@ Customer WhatsApp: ${customerWhatsapp}
   });
 
 });
+
