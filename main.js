@@ -176,6 +176,20 @@ Customer WhatsApp: ${customerWhatsapp}
 
     rzp.open();
   });
+const userMessage = `
+Hi ${username} 👋
+
+✅ Payment Successful!
+🆔 Order ID: ${orderId}
+📦 Service: ${currentService}
+💰 Amount: ₹${currentPrice}
+
+Status: Processing
+Delivery: Within 24 hours
+
+Thank you for choosing us 😊
+`;
+
 
   // ================= NAVIGATION =================
   backBtn.addEventListener("click", () => {
@@ -189,4 +203,5 @@ Customer WhatsApp: ${customerWhatsapp}
   });
 
 });
+
 
