@@ -39,6 +39,23 @@ body {
   border-radius: 5px;
   border: 1px solid #ccc;
 }
+.check-order-box {
+  margin-top: 25px;
+  padding: 15px;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+}
+
+.check-order-box input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+.check-order-box button {
+  margin-top: 10px;
+}
+
 
 /* Landing Page */
 #landing h1 {
@@ -247,3 +264,4 @@ body {
     }
 
 }
+
