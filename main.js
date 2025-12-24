@@ -29,9 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // PRICE RULES
   // ======================
   const rates = {
-    followers: 30,
-    likes: 20,
-    views: 40 
+    followers: 0.03,
+    likes: 0.02,
+    views: 0.04 
   };
 
   const packages = {
@@ -187,6 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
 });
+
 
 
 
