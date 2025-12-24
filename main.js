@@ -3,6 +3,10 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentService = "";
   let currentPrice = 0;
 
+  const usernameInput = document.getElementById("username");
+  const customerWhatsappInput = document.getElementById("customerWhatsapp");
+  const whatsappLink = document.getElementById("whatsappLink");
+
   const landing = document.getElementById("landing");
   const selection = document.getElementById("selection");
   const success = document.getElementById("success");
@@ -15,9 +19,38 @@ document.addEventListener("DOMContentLoaded", () => {
   const backBtn = document.getElementById("back-btn");
   const homeBtn = document.getElementById("home-btn");
 
-  const usernameInput = document.getElementById("username");
-  const customerWhatsappInput = document.getElementById("customerWhatsapp");
-  const whatsappLink = document.getElementById("whatsappLink");
+  // ===== CHECK ORDER FROM SELECTION PAGE =====
+const checkOrderBtn = document.getElementById("checkOrderBtn");
+
+if (checkOrderBtn) {
+  checkOrderBtn.onclick = () => {
+    const orderId = document.getElementById("checkOrderId").value.trim();
+    const result = document.getElementById("checkOrderResult");
+
+    if (!orderId) {
+      result.innerText = "❌ Please enter Order ID";
+      return;
+    }
+
+    const orders = JSON.parse(localStorage.getItem("orders")) || [];
+    const order = orders.find(o => o.orderId === orderId);
+
+    if (!order) {
+      result.innerText = "❌ Order not found";
+      return;
+    }
+
+    result.innerHTML = `
+      ✅ Order Found<br>
+      Service: ${order.service}<br>
+      Amount: ₹${order.amount}<br>
+      Status: ${order.status}
+    `;
+  };
+}
+
+
+  
 
   const packages = {
     followers: [{ qty: 100, price: 30 }],
@@ -124,3 +157,4 @@ Customer WhatsApp: ${customerWhatsapp}
   };
 
 });
+
