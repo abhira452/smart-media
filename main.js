@@ -138,10 +138,26 @@ Username: ${username}
 Customer WhatsApp: ${customerWhatsapp}
 `;
 
-        window.open(
-          "https://wa.me/" + adminNumber + "?text=" + encodeURIComponent(message),
-          "_blank"
-        );
+       const adminNumber = "918433316066"; // your number
+
+const message = `
+New Order 🚀
+
+Service: ${currentService}
+Amount: ₹${currentPrice}
+Username: ${username}
+Customer WhatsApp: ${customerWhatsapp}
+`;
+
+const whatsappURL =
+  "https://wa.me/" +
+  adminNumber +
+  "?text=" +
+  encodeURIComponent(message);
+
+// set link instead of auto-open
+document.getElementById("whatsappLink").href = whatsappURL;
+
       },
 
       modal: {
@@ -172,3 +188,4 @@ Customer WhatsApp: ${customerWhatsapp}
   };
 
 });
+
