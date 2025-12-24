@@ -5,34 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Social Media Boost</title>
 
-  <!-- CSS -->
   <link rel="stylesheet" href="style.css">
 
   <style>
-    /* BASIC SAFETY CSS (prevents click issues) */
-    .page {
-      display: none;
-    }
-    .page.active {
-      display: block;
-    }
-    .card, button {
-      cursor: pointer;
-    }
+    .page { display: none; }
+    .page.active { display: block; }
+    .card, button { cursor: pointer; }
   </style>
 </head>
 
 <body>
 
 <div id="app">
- 
-  <div class="order-details">
-  <input type="text" id="username" placeholder="Instagram Username">
-  <input type="text" id="customerWhatsapp" placeholder="WhatsApp Number">
-
-
-</div>
-
 
   <!-- 🔹 LANDING PAGE -->
   <div id="landing" class="page active">
@@ -42,17 +26,12 @@
     <div class="options">
       <div class="card" data-service="followers">
         <h2>Followers</h2>
-        <p>Increase followers</p>
       </div>
-
       <div class="card" data-service="likes">
         <h2>Likes</h2>
-        <p>Boost likes</p>
       </div>
-
       <div class="card" data-service="views">
         <h2>Views</h2>
-        <p>Get more views</p>
       </div>
     </div>
   </div>
@@ -70,23 +49,33 @@
       <button id="calculate-btn">Calculate Price</button>
     </div>
 
-    <div id="total-price" class="hidden">
-  <p>Total: <span id="price-display">₹0</span></p>
-  <button id="pay-btn" class="pay-btn">Pay Now</button>
-</div>
+    <!-- ✅ USER DETAILS (CORRECT PLACE) -->
+    <div class="order-details">
+      <input type="text" id="username" placeholder="Instagram Username">
+      <input type="text" id="customerWhatsapp" placeholder="WhatsApp Number">
+    </div>
 
+    <div id="total-price" class="hidden">
+      <p>Total: <span id="price-display">₹0</span></p>
+      <button id="pay-btn">Pay Now</button>
+    </div>
   </div>
 
   <!-- 🔹 SUCCESS PAGE -->
   <div id="success" class="page">
-    <h2>Payment Successful</h2>
-    <p>Your Order ID: <strong id="orderIdText"></strong></p>
-<a href="track.html">Track My Order</a>
+    <h2>Payment Successful ✅</h2>
 
-    <p>Your order is being processed.</p>
+    <p>Your Order ID: <strong id="orderIdText"></strong></p>
+
     <a id="whatsappLink" target="_blank">
-  <button class="home-btn">Send Order on WhatsApp</button>
-</a>
+      <button>Send Order on WhatsApp</button>
+    </a>
+
+    <br><br>
+
+    <a href="track.html">Track My Order</a>
+
+    <br><br>
 
     <button id="home-btn">Back to Home</button>
   </div>
@@ -96,21 +85,8 @@
 <!-- Razorpay -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-<!-- MAIN JS -->
+<!-- Main JS -->
 <script src="main.js"></script>
 
 </body>
 </html>
-
-
-</body>
-</html>
-
-
-
-
-
-
-
-
-
