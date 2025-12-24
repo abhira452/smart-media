@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "ORD-" + new Date().getFullYear() + "-" + Math.floor(10000 + Math.random() * 90000);
 
     const options = {
-      key: "rzp_test_YOUR_KEY_ID", // 🔴 PUT YOUR TEST KEY
+      key: "rzp_test_Rv7XMdWzLnkhx3", // 🔴 PUT YOUR TEST KEY
       amount: currentPrice * 100,
       currency: "INR",
       name: "Social Media Boost",
@@ -119,3 +119,4 @@ Delivery: Within 24 hours
   };
 
 });
+
