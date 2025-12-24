@@ -113,12 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Please select a package or calculate price");
       return;
     }
-const orderData = {
-  service: currentService,
-  quantity: currentQuantity,
-  username: document.getElementById("username").value,
-  link: document.getElementById("profileLink").value,
-  whatsapp: document.getElementById("whatsapp").value
+
 };
 
     try {
@@ -192,6 +187,7 @@ const orderData = {
   };
 
 });
+
 
 
 
