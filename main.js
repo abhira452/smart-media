@@ -1,4 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // HELP TOOL TOGGLE
+const helpBtn = document.getElementById("helpBtn");
+const helpOptions = document.getElementById("helpOptions");
+
+if (helpBtn) {
+  helpBtn.onclick = () => {
+    helpOptions.style.display =
+      helpOptions.style.display === "block" ? "none" : "block";
+  };
+}
+
 
   let currentService = "";
   let currentPrice = 0;
@@ -157,4 +168,5 @@ Customer WhatsApp: ${customerWhatsapp}
   };
 
 });
+
 
