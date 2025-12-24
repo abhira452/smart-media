@@ -11,6 +11,20 @@
       padding: 20px;
     }
 
+    .login-box {
+      max-width: 300px;
+      margin: 100px auto;
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    input, button, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 10px;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -23,36 +37,73 @@
       text-align: center;
     }
 
-    select {
-      padding: 5px;
-    }
-
-    button {
-      padding: 6px 10px;
-      cursor: pointer;
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 
 <body>
 
-<h2>Admin Panel – Orders</h2>
+<!-- 🔐 LOGIN SCREEN -->
+<div id="loginBox" class="login-box">
+  <h3>Admin Login</h3>
+  <input type="password" id="adminPassword" placeholder="Enter Admin Password">
+  <button onclick="login()">Login</button>
+  <p id="loginError" style="color:red;"></p>
+</div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Order ID</th>
-      <th>Service</th>
-      <th>Amount</th>
-      <th>Username</th>
-      <th>Status</th>
-      <th>Update</th>
-    </tr>
-  </thead>
-  <tbody id="ordersTable"></tbody>
-</table>
+<!-- 🔓 ADMIN PANEL -->
+<div id="adminPanel" class="hidden">
+  <h2>Admin Panel – Orders</h2>
+  <button onclick="logout()">Logout</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Service</th>
+        <th>Amount</th>
+        <th>Username</th>
+        <th>Status</th>
+        <th>Update</th>
+      </tr>
+    </thead>
+    <tbody id="ordersTable"></tbody>
+  </table>
+</div>
 
 <script>
+const ADMIN_PASSWORD = "Abhirai@452"; // 🔴 CHANGE THIS PASSWORD
+
+// Auto-login if already logged in
+if (localStorage.getItem("adminLoggedIn") === "true") {
+  showAdminPanel();
+}
+
+function login() {
+  const enteredPassword = document.getElementById("adminPassword").value;
+  const error = document.getElementById("loginError");
+
+  if (enteredPassword === ADMIN_PASSWORD) {
+    localStorage.setItem("adminLoggedIn", "true");
+    showAdminPanel();
+  } else {
+    error.innerText = "Wrong password";
+  }
+}
+
+function logout() {
+  localStorage.removeItem("adminLoggedIn");
+  location.reload();
+}
+
+function showAdminPanel() {
+  document.getElementById("loginBox").classList.add("hidden");
+  document.getElementById("adminPanel").classList.remove("hidden");
+  loadOrders();
+}
+
 function loadOrders() {
   const orders = JSON.parse(localStorage.getItem("orders")) || [];
   const table = document.getElementById("ordersTable");
@@ -90,10 +141,8 @@ function updateStatus(index) {
   const newStatus = document.getElementById(`status-${index}`).value;
   orders[index].status = newStatus;
   localStorage.setItem("orders", JSON.stringify(orders));
-  alert("Status updated successfully");
+  alert("Status updated");
 }
-
-loadOrders();
 </script>
 
 </body>
