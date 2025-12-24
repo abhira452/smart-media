@@ -20,6 +20,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const backBtn = document.getElementById("back-btn");
   const homeBtn = document.getElementById("home-btn");
 
+  // 🔹 ORDER DETAILS INPUTS
+  const usernameInput = document.getElementById("username");
+  const profileLinkInput = document.getElementById("profileLink");
+  const customerWhatsappInput = document.getElementById("customerWhatsapp");
+
   // ===== PRICING RULES =====
   const rates = {
     followers: 0.30,
@@ -64,11 +69,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const div = document.createElement("div");
       div.className = "package";
       div.innerText = `${p.qty} ${currentService} - ₹${p.price}`;
+
       div.onclick = () => {
         currentPrice = p.price;
         priceDisplay.innerText = "₹" + currentPrice;
         totalPriceDiv.classList.remove("hidden");
       };
+
       packagesDiv.appendChild(div);
     });
   }
@@ -91,24 +98,57 @@ document.addEventListener("DOMContentLoaded", () => {
     totalPriceDiv.classList.remove("hidden");
   };
 
-  // ===== RAZORPAY PAYMENT =====
+  // ===== RAZORPAY PAYMENT + WHATSAPP =====
   payBtn.onclick = () => {
+
     if (!currentPrice || currentPrice <= 0) {
       alert("Please select a package or calculate price");
       return;
     }
 
+    // 🔹 VALIDATE ORDER DETAILS
+    const username = usernameInput.value.trim();
+    const profileLink = profileLinkInput.value.trim();
+    const customerWhatsapp = customerWhatsappInput.value.trim();
+
+    if (!username || !profileLink || !customerWhatsapp) {
+      alert("Please fill all order details");
+      return;
+    }
+
     var options = {
-      key: "rzp_test_Rv7XMdWzLnkhx3", // 🔴 PUT YOUR TEST KEY HERE
+      key: "rzp_test_Rv7XMdWzLnkhx3", // 🔴 PUT YOUR RAZORPAY TEST KEY
       amount: currentPrice * 100,
       currency: "INR",
       name: "Social Media Boost",
       description: currentService + " order",
 
       handler: function () {
-        // SUCCESS
+
+        // ✅ SHOW SUCCESS PAGE
         selection.classList.remove("active");
         success.classList.add("active");
+
+        // ✅ WHATSAPP MESSAGE TO ADMIN
+        const adminNumber = "918433316066"; // 🔴 YOUR WHATSAPP NUMBER
+
+        const message = `
+New Order Received 🚀
+
+Service: ${currentService}
+Amount: ₹${currentPrice}
+Username: ${username}
+Link: ${profileLink}
+Customer WhatsApp: ${customerWhatsapp}
+`;
+
+        const whatsappURL =
+          "https://wa.me/" +
+          adminNumber +
+          "?text=" +
+          encodeURIComponent(message);
+
+        window.open(whatsappURL, "_blank");
       },
 
       modal: {
