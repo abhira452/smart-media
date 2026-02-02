@@ -67,9 +67,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ================= PRICES ================= */
   const ratePerUnit = {
-    MOMOs: 0.30,
+    MOMOs: 30,
     PIzZA: 200,
-    BURGER: 0.04
+    BURGER: 40
   };
 
   const packages = {
@@ -206,5 +206,6 @@ Customer WhatsApp: ${customerWhatsapp}
   };
 
 });
+
 
 
