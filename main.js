@@ -67,15 +67,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ================= PRICES ================= */
   const ratePerUnit = {
-    followers: 0.30,
-    likes: 0.20,
-    views: 0.04
+    MOMOs: 0.30,
+    PIzZA: 200,
+    BURGER: 0.04
   };
 
   const packages = {
-    followers: [{ qty: 100, price: 30 }],
-    likes: [{ qty: 100, price: 20 }],
-    views: [{ qty: 1000, price: 40 }]
+    MOMOs: [{ qty: 1, price: 30 }],
+    PIzZA: [{ qty: 1, price: 200 }],
+    BURGER: [{ qty: 1, price: 40 }]
   };
 
   /* ================= SERVICE CLICK ================= */
@@ -206,4 +206,5 @@ Customer WhatsApp: ${customerWhatsapp}
   };
 
 });
+
 
